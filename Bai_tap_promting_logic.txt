@@ -1,0 +1,36 @@
+BÀI TẬP: PROMPTING NÂNG CAO (LOGIC & CHUỖI)
+Bài toán: Cửa hàng TechShop nhận đơn qua tin nhắn, cần AI đọc tin, kiểm tra lỗi và tính tiền.
+Bước 1: Thiết kế giải pháp (I/O)
+Input: tin nhắn của khách, bảng giá, quy tắc xử lý lỗi.
+Output: JSON gồm suy luận từng bước, tên, SĐT, sản phẩm, số lượng, danh sách lỗi, tổng tiền.
+Kỹ thuật dùng:
+- Chain-of-Thought: bắt AI làm theo 3 bước và viết ra suy luận.
+- Prompt Chaining: kết quả JSON được đưa sang prompt tiếp theo để nhắn lại cho khách.
+- Xử lý đứt gãy: dùng câu lệnh "Nếu... thì..." khi dữ liệu thiếu hoặc sai.
+Bước 2: Viết prompt và chạy thử
+Prompt:
+Bạn là nhân viên xử lý đơn hàng của cửa hàng TechShop.
+Hãy đọc tin nhắn của khách và làm từng bước:
+Bước 1: Lấy ra tên, số điện thoại, sản phẩm, số lượng.
+Bước 2: Kiểm tra lỗi.
+Bước 3: Tính tiền nếu không có lỗi.
+Bảng giá: Chuột 150.000đ, Bàn phím 500.000đ.
+Quy tắc:
+- Nếu thiếu thông tin thì ghi "THIẾU", không được tự đoán.
+- Nếu số điện thoại không đủ 10 số thì ghi lỗi "SAI SĐT".
+- Nếu có lỗi thì tổng tiền = null.
+Trả về JSON gồm: suy_luan, ten, sdt, san_pham, so_luong, loi, tong_tien.
+Tin nhắn khách: "Mình là Lan, mua 2 bàn phím, SĐT 09123456"
+
+Kết quả AI:
+{
+  "suy_luan": "B1: Lan, 09123456, bàn phím, 2. B2: SĐT chỉ có 8 số nên sai. B3: Có lỗi nên không tính tiền.",
+  "ten": "Lan",
+  "sdt": "09123456",
+  "san_pham": "Bàn phím",
+  "so_luong": 2,
+  "loi": ["SAI SĐT"],
+  "tong_tien": null
+}
+
+Nhận xét: AI phát hiện đúng SĐT thiếu số và không tự đoán, không tính tiền.
